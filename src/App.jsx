@@ -15,6 +15,7 @@ function App(){
             paneer:3,
         }
     };
+
     const handleToppingChange=(e)=>{
         const {value,checked}=e.target;
         if(checked){
@@ -32,7 +33,7 @@ function App(){
         });
         return total.toFixed(2);
     };
-     
+
     return(
         <div>
             <h1>Pizza Billing App</h1>
@@ -58,8 +59,9 @@ function App(){
                 onChange={(e)=>setSize(e.target.value)}/>
                 Large (${prices.large})
             </label>
+
             <h2>Select Toppings:</h2>
-            {Object.keys(prices.toppings).map(t=>(
+            {Object.keys(prices.toppings).map(t=>( 
                 <label key={t}>
                     <input type="checkbox" value={t}
                     checked={toppings.includes(t)}
@@ -68,8 +70,9 @@ function App(){
                     <br/>
                 </label>
             ))}
-            <h2>Total Price:${CalculateTotal()}</h2>
+            <h2>Total Price: ${CalculateTotal()}</h2>
         </div>
     );
 }
+
 export default App;
