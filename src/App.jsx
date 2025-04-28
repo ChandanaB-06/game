@@ -1,30 +1,78 @@
-import { useState } from 'react';
 import './App.css'
+import { useState } from "react";
 
-function App() {
-const[target]=useState(Math.floor(Math.random()*10+1));
-const [guess,setGuess]=useState('');
-const [message,setMessage]=useState('');
+function App(){
+    const [ size, setSize ] = useState("medium");
+    const [ toppings, setToppings ] = useState([]);
 
-const checkGuess =() =>
-{
-  if(parseInt(guess)===target){
-    setMessage('congrats!!!!!! Right Guess');
-  }else{
-  setMessage(guess>target? 'too high guess':'too low guess' );}
-  setGuess('');
+    const prices = {
+        small:5,
+        medium:8,
+        large:12,
+        toppings:{
+            cheese:2,
+            mushrooms:1.5,
+            paneer:3,
+        }
+    };
+
+    const handleToppingChange=(e)=>{
+        const {value,checked}=e.target;
+        if(checked){
+            setToppings([...toppings,value]);
+        }
+        else{
+            setToppings(toppings.filter(t=>t!==value));
+        }
+    };
+
+    const CalculateTotal=()=>{
+        let total=prices[size];
+        toppings.forEach(t=>{
+            total+=prices.toppings[t];
+        });
+        return total.toFixed(2);
+    };
+
+    return(
+        <div>
+            <h1>Pizza Billing App</h1>
+
+            <h2>Select Size:</h2>
+            <label >
+                <input type="radio" name="size" value="small"
+                checked={size==="small"}
+                onChange={(e)=>setSize(e.target.value)}/>
+                Small (${prices.small})
+            </label>
+            <br/>
+            <label>
+                <input type="radio" name="size" value="medium"
+                checked={size==="medium"}
+                onChange={(e)=>setSize(e.target.value)}/>
+                Medium (${prices.medium})
+            </label>
+            <br/>
+            <label>
+                <input type="radio" name="size" value="large"
+                checked={size==="large"}
+                onChange={(e)=>setSize(e.target.value)}/>
+                Large (${prices.large})
+            </label>
+
+            <h2>Select Toppings:</h2>
+            {Object.keys(prices.toppings).map(t=>( 
+                <label key={t}>
+                    <input type="checkbox" value={t}
+                    checked={toppings.includes(t)}
+                    onChange={handleToppingChange}/>
+                    {t.charAt(0).toUpperCase()+t.slice(1)} (${prices.toppings[t]})
+                    <br/>
+                </label>
+            ))}
+            <h2>Total Price: ${CalculateTotal()}</h2>
+        </div>
+    );
 }
 
-
-return(
-  <div>
-    <h2>GUESS A NUMBER GAME</h2>
-    <p>GUESS A NUMBER  (1-10)</p>
-    <input type="number" value={guess} onChange={(e)=> setGuess(e.target.value)}/>
-    <button onClick={checkGuess}>Check</button>
-    <p>{message}</p>
-    <p>Target number was : {target}</p>
-  </div>
-)
-}
 export default App;
